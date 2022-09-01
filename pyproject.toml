@@ -3,9 +3,13 @@ name = "poetry-plugin-sort"
 version = "0.1.0b1"
 description = "Poetry plugin to sort the dependencies alphabetically"
 authors = ["Andrei Shabanski <shabanski.andrei@gmail.com>"]
-packages = [{include = "poetry_plugin_sort"}]
 license = "MIT"
 readme = "README.md"
+homepage = "https://github.com/andrei-shabanski/poetry-plugin-sort"
+repository = "https://github.com/andrei-shabanski/poetry-plugin-sort"
+keywords = ["poetry", "plugin", "dependencies sorting"]
+
+packages = [{include = "poetry_plugin_sort"}]
 
 [tool.poetry.dependencies]
 python = "^3.7"

@@ -1,5 +1,7 @@
 # Poetry Plugin: Dependencies sorting
 
+[![PyPI Version](https://img.shields.io/pypi/v/poetry-plugin-sort?label=PyPI)](https://pypi.org/project/poetry-plugin-sort/)
+
 This package is a plugin that sort dependencies alphabetically in pyproject.toml
 after running `poetry init`, `poetry add`, or `poetry remove`.
 Since [Introduce dependency sorting #3996](https://github.com/python-poetry/poetry/pull/3996) pull request still open
