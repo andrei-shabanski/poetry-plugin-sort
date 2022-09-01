@@ -1,2 +1,28 @@
-# poetry-plugin-sort
-Poetry plugin to sort the dependencies
+# Poetry Plugin: Dependencies sorting
+
+This package is a plugin that sort dependencies alphabetically in pyproject.toml
+after running `poetry init`, `poetry add`, or `poetry remove`.
+Since [Introduce dependency sorting #3996](https://github.com/python-poetry/poetry/pull/3996) pull request still open
+this plugin is a workaround for [!312](https://github.com/python-poetry/poetry/issues/312) issue.
+
+**Note**: the plugin is in the beta version!
+
+# Installation
+
+Just use `poetry self add` command to add this plugin.
+
+```bash
+poetry self add poetry-plugin-sort
+```
+
+If you used pipx to install Poetry, add the plugin via `pipx inject` command.
+
+```bash
+pipx inject poetry poetry-plugin-sort
+```
+
+And if you installed Poetry using pip, you can install the plugin the same way.
+
+```bash
+pip install poetry poetry-plugin-sort
+```
