@@ -28,3 +28,14 @@ And if you installed Poetry using pip, you can install the plugin the same way.
 ```bash
 pip install poetry poetry-plugin-sort
 ```
+
+# Usage
+
+The plugin sorts dependencies each time when you change dependencies via the `poetry init`, `poetry add`, or
+`poetry remove` commands.
+
+To sort dependencies without making changes to the depenencies list, the plugin provides a  `sort` command.
+
+```bash
+poetry sort
+```
