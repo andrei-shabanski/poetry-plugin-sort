@@ -1,0 +1,74 @@
+[tool.poetry]
+name = "test"
+version = "0.1.0"
+description = ""
+authors = ["<author@example.com>"]
+
+[tool.poetry.dependencies]
+# anothercomm = "^5.2.7"
+# Abc-3 - test comments
+# -- Start of multiline comment
+# to ensure that won't be sorted
+# or removed.
+# -- End of multiline comment
+
+# [tool.mypy]
+# Unfortnatly, this block will move up
+python = "^3.8"
+abc = "1"
+Abc-1 = "2"
+ABC-12 = "2"
+abc-2 = "2"
+abc-22 = "2"
+Django = "^4.0"
+Django-Allauth = "^1.50"
+django-filters = "^2021"
+DJANGO-REDIS = "5.2.0"
+wow = "^123"
+
+[tool.poetry.group.dev.dependencies]
+coverage = {extras = ["toml"], version = "^6.1.2"}
+factory-boy = "^3.2.1"
+Faker = "^2.0.0" # deprecated - upgrade to the latest version
+fakeredis = "^1.6.1"
+flake8 = "^5.0.4"
+flake8-bugbear = "^22.1.11"
+Flake8-Comprehensions = "^3.7.0"
+Flake8-Isort = "^4.1.1"
+flake8-mutable = "^1.2.0"
+freezegun = "^1.1.0"
+isort = "^5.10.1"
+moto = {extras = ["s3"], version = "^3.1.14"}
+mypy = "^0.971"
+pep8-naming = "^0.13.1"
+pre-commit = "^2.15.0"
+
+[tool.black]
+target-version = ['py37']
+preview = true
+
+
+[tool.poetry.dev-dependencies]
+flake8 = "^5.0.4"
+flake8-bugbear = "^22.1.11"
+flake8-isort = "^4.1.1"
+lupa = "^1.10"
+requests-mock = "^1.9.3"
+tblib = "^1.7.0"
+
+[tool.poetry.group.ci.dependencies]
+ecs-deploy = "^1.13.1"
+PyGithub = "^1.55"
+pytz = "^2022.2.1"
+requests = "^2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+# [tool.isort]
+# profile = "black"
+
+# Comment at the end of the file

@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Type
 
 from cleo.events import console_events
-from cleo.events.console_command_event import ConsoleCommandEvent
+from cleo.events.console_terminate_event import ConsoleTerminateEvent
 from cleo.events.event_dispatcher import EventDispatcher
 from cleo.io.io import IO
 from poetry.console.application import Application
@@ -41,7 +41,7 @@ class SortDependenciesPlugin(ApplicationPlugin):
         super().activate(application)
 
     def sort_dependencies(
-        self, event: ConsoleCommandEvent, event_name: str, dispatcher: EventDispatcher
+        self, event: ConsoleTerminateEvent, event_name: str, dispatcher: EventDispatcher
     ) -> None:
         io = event.io
         command = event.command
@@ -66,7 +66,7 @@ class SortDependenciesPlugin(ApplicationPlugin):
             )
             return
 
-        sorter = Sorter(event.command.poetry, io)
+        sorter = Sorter(command.poetry, io)
         sorter.sort()
 
     def _write_debug_lines(self, io: IO, message: str) -> None:

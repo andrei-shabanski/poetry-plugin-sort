@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "test"
+version = "0.1.0"
+description = ""
+authors = ["<author@example.com>"]
+
+[tool.poetry.dev-dependencies]
+# fakeredis = "^1.6.1"
+coverage = {extras = ["toml"], version = "^6.1.2"}
+factory-boy = "^3.2.1"
+Faker = "^2.0.0" # deprecated - upgrade to the latest version
+flake8 = "^5.0.4"
+flake8-bugbear = "^22.1.11"
+Flake8-Comprehensions = "^3.7.0"
+Flake8-Isort = "^4.1.1"
+flake8-mutable = "^1.2.0"
+freezegun = "^1.1.0"
+isort = "^5.10.1"
+moto = {extras = ["s3"], version = "^3.1.14"}
+mypy = "^0.971"
+pep8-naming = "^0.13.1"
+pre-commit = "^2.15.0"

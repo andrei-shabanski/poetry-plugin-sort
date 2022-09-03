@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "test"
+version = "0.1.0"
+description = ""
+authors = ["<author@example.com>"]
+
+[tool.black]
+target-version = ['py37']
+preview = true
+
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
