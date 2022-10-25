@@ -1,6 +1,12 @@
 # Change Log
 
-## [0.1.0b3] - 2022-09-02
+## [0.1.1] - 2022-10-25
+
+### Changed
+
+- Attached comment lines to a package below instead of moving all comment lines to the top of the section
+
+## [0.1.0] - 2022-09-02
 
 ### Added
 
