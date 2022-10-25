@@ -1,10 +1,13 @@
-from typing import Any
+from functools import partial
 from typing import List
+from typing import Optional
 from typing import Tuple
 
 from cleo.io.io import IO
 from poetry.core.packages.dependency_group import MAIN_GROUP
 from poetry.core.poetry import Poetry
+from tomlkit.items import Item
+from tomlkit.items import Key
 
 
 class Sorter:
@@ -43,21 +46,33 @@ class Sorter:
         if self._io.is_debug():
             self._io.write_line(f'Sorting items in [{".".join(path)}].')
 
-        items = tuple(dependency_section.items())
-        for key, _ in items:
-            dependency_section.remove(key)
+        items = dependency_section.value.body
+        dependency_section.value._body = sorted(
+            items, key=partial(self._sort_key, items=items)
+        )
 
-        dependency_section.update(sorted(items, key=self._sort_key))
+    def _sort_key(
+        self, item: Tuple[Optional[Key], Item], items: List[Tuple[Optional[Key], Item]]
+    ) -> str:
+        package_name, package_value = item
 
-    def _sort_key(self, item: Tuple[str, Any]) -> str:
-        package_name, package_version = item
-        package_name = package_name.lower()
+        if package_name:
+            package_name_str = package_name.key.lower()
+            if package_name_str == "python":
+                return chr(1)
+            return package_name_str
 
-        # move python version to top
-        if package_name == "python":
-            package_name = f"____{package_name}"
+        idx = items.index(item)
+        for next_item in items[idx:]:
+            if not next_item[0]:
+                continue
 
-        return package_name
+            next_item_str = next_item[0].key.lower()
+            if next_item_str == "python":
+                return chr(0)
+            return next_item_str
+
+        return chr(127)
 
 
 def _get_by_path(d: dict, path: List[str]):
@@ -65,7 +80,7 @@ def _get_by_path(d: dict, path: List[str]):
     Gets a value from the dictionary by the path.
     """
     for key in path:
-        d = d.get(key)
+        d = d.get(key, None)
         if d is None:
             return None
     return d

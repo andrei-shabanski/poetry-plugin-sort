@@ -5,7 +5,12 @@ description = ""
 authors = ["<author@example.com>"]
 
 [tool.poetry.dev-dependencies]
+# first comment
+python = "^3.8"
 factory-boy = "^3.2.1"
+#
+# second comment
+#
 flake8 = "^5.0.4"
 pep8-naming = "^0.13.1"
 flake8-mutable = "^1.2.0"
@@ -19,4 +24,18 @@ Flake8-Isort = "^4.1.1"
 isort = "^5.10.1"
 flake8-bugbear = "^22.1.11"
 # fakeredis = "^1.6.1"
+# line 1
+# line 2
+# Line 3
+# Line 0
+# Line
+# Extra
+# Abc
+#  a b c
+# extra line 1
+# extra line 2
+# Extra line 3
 moto = {extras = ["s3"], version = "^3.1.14"}
+# Last comment line
+# must stay
+# at the end of the section

@@ -5,8 +5,19 @@ description = ""
 authors = ["<author@example.com>"]
 
 [tool.poetry.dependencies]
-# anothercomm = "^5.2.7"
+python = "^3.8"
+abc = "1"
+Abc-1 = "2"
+ABC-12 = "2"
 # Abc-3 - test comments
+abc-2 = "2"
+# anothercomm = "^5.2.7"
+abc-22 = "2"
+Django = "^4.0"
+Django-Allauth = "^1.50"
+django-filters = "^2021"
+DJANGO-REDIS = "5.2.0"
+wow = "^123"
 # -- Start of multiline comment
 # to ensure that won't be sorted
 # or removed.
@@ -14,17 +25,6 @@ authors = ["<author@example.com>"]
 
 # [tool.mypy]
 # Unfortnatly, this block will move up
-python = "^3.8"
-abc = "1"
-Abc-1 = "2"
-ABC-12 = "2"
-abc-2 = "2"
-abc-22 = "2"
-Django = "^4.0"
-Django-Allauth = "^1.50"
-django-filters = "^2021"
-DJANGO-REDIS = "5.2.0"
-wow = "^123"
 
 [tool.poetry.group.dev.dependencies]
 coverage = {extras = ["toml"], version = "^6.1.2"}
