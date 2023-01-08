@@ -55,8 +55,10 @@ class SortDependenciesPlugin(ApplicationPlugin):
         if not isinstance(command, (InitCommand, AddCommand, RemoveCommand)):
             self._write_debug_lines(
                 io,
-                f"Skip sorting dependencies due to {command} does not change the"
-                " state.",
+                (
+                    f"Skip sorting dependencies due to {command} does not change the"
+                    " state."
+                ),
             )
             return
 
