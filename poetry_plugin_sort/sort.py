@@ -1,13 +1,10 @@
 from functools import partial
-from typing import List
-from typing import Optional
-from typing import Tuple
+from typing import Any, List, Optional, Tuple
 
 from cleo.io.io import IO
 from poetry.core.packages.dependency_group import MAIN_GROUP
 from poetry.core.poetry import Poetry
-from tomlkit.items import Item
-from tomlkit.items import Key
+from tomlkit.items import Item, Key
 
 
 class Sorter:
@@ -15,7 +12,7 @@ class Sorter:
         self._poetry = poetry
         self._io = io
 
-    def sort(self):
+    def sort(self) -> None:
         """Sorts dependencies from all groups and writes changes to pyproject.toml"""
         group_names = self._poetry.package.dependency_group_names(include_optional=True)
         for group in group_names:
@@ -38,7 +35,7 @@ class Sorter:
         self._poetry.pyproject.save()
         self._io.write_line("Dependencies were sorted.")
 
-    def _sort_dependencies_by_path(self, path: List[str]):
+    def _sort_dependencies_by_path(self, path: List[str]) -> None:
         dependency_section = _get_by_path(self._poetry.pyproject.data, path)
         if not dependency_section:
             return
@@ -75,7 +72,7 @@ class Sorter:
         return chr(127)
 
 
-def _get_by_path(d: dict, path: List[str]):
+def _get_by_path(d: dict, path: List[str]) -> Any:
     """
     Gets a value from the dictionary by the path.
     """
