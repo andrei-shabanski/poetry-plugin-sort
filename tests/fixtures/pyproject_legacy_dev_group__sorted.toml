@@ -6,7 +6,7 @@ authors = ["<author@example.com>"]
 
 [tool.poetry.dev-dependencies]
 # first comment
-python = "^3.8"
+python = "^3.7"
 coverage = {extras = ["toml"], version = "^6.1.2"}
 factory-boy = "^3.2.1"
 Faker = "^2.0.0" # deprecated - upgrade to the latest version
