@@ -8,11 +8,13 @@ from tomlkit.items import Item, Key
 
 
 class Sorter:
-    def __init__(self, poetry: Poetry, io: IO):
+    def __init__(self, poetry: Poetry, io: IO, check: bool = False):
         self._poetry = poetry
         self._io = io
+        self._check = check
+        self._success = True
 
-    def sort(self) -> None:
+    def sort(self) -> bool:
         """Sorts dependencies from all groups and writes changes to pyproject.toml"""
         group_names = self._poetry.package.dependency_group_names(include_optional=True)
         for group in group_names:
@@ -32,8 +34,10 @@ class Sorter:
         # sort the legacy dev group
         self._sort_dependencies_by_path(["tool", "poetry", "dev-dependencies"])
 
-        self._poetry.pyproject.save()
-        self._io.write_line("Dependencies were sorted.")
+        if not self._check:
+            self._poetry.pyproject.save()
+            self._io.write_line("Dependencies were sorted.")
+        return self._success
 
     def _sort_dependencies_by_path(self, path: List[str]) -> None:
         dependency_section = _get_by_path(self._poetry.pyproject.data, path)
@@ -44,9 +48,16 @@ class Sorter:
             self._io.write_line(f'Sorting items in [{".".join(path)}].')
 
         items = dependency_section.value.body
-        dependency_section.value._body = sorted(
-            items, key=partial(self._sort_key, items=items)
-        )
+        sorted_body = sorted(items, key=partial(self._sort_key, items=items))
+
+        if self._check:
+            if sorted_body != dependency_section.value.body:
+                self._io.write_error_line(
+                    f"Dependencies are not sorted in {'.'.join(path)}."
+                )
+                self._success = False
+        else:
+            dependency_section.value._body = sorted_body
 
     def _sort_key(
         self, item: Tuple[Optional[Key], Item], items: List[Tuple[Optional[Key], Item]]

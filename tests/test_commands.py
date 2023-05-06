@@ -5,20 +5,45 @@ import pytest
 from cleo.io.inputs.argv_input import ArgvInput
 
 
+@pytest.mark.parametrize(
+    ("argv", "input_fixture", "expected_output", "expected_rc"),
+    (
+        (
+            ["", "sort"],
+            "pyproject_multiple_groups.toml",
+            "pyproject_multiple_groups__sorted.toml",
+            0,
+        ),
+        (
+            ["", "sort", "--check"],
+            "pyproject_multiple_groups.toml",
+            "pyproject_multiple_groups.toml",
+            1,
+        ),
+        (
+            ["", "sort", "--check"],
+            "pyproject_multiple_groups__sorted.toml",
+            "pyproject_multiple_groups__sorted.toml",
+            0,
+        ),
+    ),
+)
 def test_sort_command(
     application_factory,
     fixture_dir,
     poetry_from_fixture,
+    argv,
+    input_fixture,
+    expected_output,
+    expected_rc,
 ):
-    poetry = poetry_from_fixture("pyproject_multiple_groups.toml")
+    poetry = poetry_from_fixture(input_fixture)
     app = application_factory(poetry)
 
-    app.run(input=ArgvInput(["", "sort"]))
+    assert app.run(input=ArgvInput(argv)) == expected_rc
 
     sorted_pyproject_content = poetry.file.path.read_text()
-    expected_pyproject_content = (
-        fixture_dir / "pyproject_multiple_groups__sorted.toml"
-    ).read_text()
+    expected_pyproject_content = (fixture_dir / expected_output).read_text()
     assert sorted_pyproject_content == expected_pyproject_content
 
 
