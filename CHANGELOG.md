@@ -1,5 +1,11 @@
 # Change Log
 
+## dev
+
+### Added
+
+- Added a `--check` option to verify if dependencies are already sorted.
+
 ## [0.1.1] - 2022-10-25
 
 ### Changed

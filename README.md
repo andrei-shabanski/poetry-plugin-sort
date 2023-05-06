@@ -39,3 +39,13 @@ To sort dependencies without making changes to the depenencies list, the plugin 
 ```bash
 poetry sort
 ```
+
+The `--check` option can be used to verify if dependencies are sorted (e.g. for CI purposes).
+
+```bash
+if poetry sort --check; then
+    echo "It's all fine"
+else
+    echo "Please sort your dependencies"
+fi
+```

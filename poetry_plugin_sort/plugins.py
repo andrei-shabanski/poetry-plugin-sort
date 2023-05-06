@@ -5,6 +5,7 @@ from typing import Type
 from cleo.events import console_events
 from cleo.events.console_terminate_event import ConsoleTerminateEvent
 from cleo.events.event_dispatcher import EventDispatcher
+from cleo.helpers import option
 from cleo.io.io import IO
 from poetry.console.application import Application
 from poetry.console.commands.add import AddCommand
@@ -19,11 +20,15 @@ from poetry_plugin_sort.sort import Sorter
 class SortCommand(Command):
     name = "sort"
     description = "Sorts the dependencies in pyproject.toml"
+    options = [
+        option(
+            "check", flag=True, description="Don't sort, just check if already sorted."
+        )
+    ]
 
     def handle(self) -> int:
-        sorter = Sorter(self.poetry, self.io)
-        sorter.sort()
-        return 0
+        sorter = Sorter(self.poetry, self.io, check=self.option("check"))
+        return 0 if sorter.sort() else 1
 
 
 class SortDependenciesPlugin(ApplicationPlugin):
