@@ -12,9 +12,9 @@ from poetry.console.application import Application
 from poetry.console.commands.add import AddCommand
 from poetry.console.commands.command import Command
 from poetry.console.commands.init import InitCommand
-from poetry.console.commands.remove import RemoveCommand
 from poetry.plugins.application_plugin import ApplicationPlugin
 
+from poetry_plugin_sort import config
 from poetry_plugin_sort.sort import Sorter
 
 
@@ -40,9 +40,10 @@ class SortDependenciesPlugin(ApplicationPlugin):
         return [SortCommand]
 
     def activate(self, application: Application) -> None:
-        application.event_dispatcher.add_listener(  # type: ignore[union-attr]
-            console_events.TERMINATE, self.sort_dependencies
-        )
+        if config.is_sorting_enabled():
+            application.event_dispatcher.add_listener(  # type: ignore[union-attr]
+                console_events.TERMINATE, self.sort_dependencies
+            )
 
         super().activate(application)
 
@@ -60,7 +61,7 @@ class SortDependenciesPlugin(ApplicationPlugin):
             )
             return
 
-        if not isinstance(command, (InitCommand, AddCommand, RemoveCommand)):
+        if not isinstance(command, (InitCommand, AddCommand)):
             self._write_debug_lines(
                 io,
                 (

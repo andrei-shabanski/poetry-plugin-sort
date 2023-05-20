@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+import os
+
+from unittest import mock
+
 import pytest
 
 from cleo.io.inputs.argv_input import ArgvInput
@@ -51,40 +55,90 @@ def test_sort_command(
     ("argv", "command_path"),
     (
         (
-            ["", "add", "somepckage"],
-            "poetry.console.commands.add.AddCommand",
-        ),
-        (
-            ["", "remove", "somepckage"],
-            "poetry.console.commands.remove.RemoveCommand",
-        ),
-        (
             ["", "init"],
             "poetry.console.commands.init.InitCommand",
         ),
+        (
+            ["", "add", "somepckage"],
+            "poetry.console.commands.add.AddCommand",
+        ),
     ),
 )
-def test_sort_dependencies_after_another_command(
+@pytest.mark.parametrize(
+    "poetry_sort_enabled_var", (None, "Y", "Yes", "t", "TRUE", "oN", "1")
+)
+def test_sort_dependencies_after_calling_another_command(
     application_factory,
     fixture_dir,
     poetry_from_fixture,
     mocker,
     argv: list[str],
     command_path: str,
+    poetry_sort_enabled_var,
 ):
-    handle_mock = mocker.patch(f"{command_path}.handle", return_value=0)
+    """
+    Makes sure that dependencies will be sorted after calling `poetry init`
+    and `poetry add`
+    """
+    if poetry_sort_enabled_var:
+        environ = {"POETRY_SORT_ENABLED": poetry_sort_enabled_var}
+    else:
+        environ = {}
 
-    poetry = poetry_from_fixture("pyproject_multiple_groups.toml")
-    app = application_factory(poetry)
+    with mock.patch.dict(os.environ, environ):
+        handle_mock = mocker.patch(f"{command_path}.handle", return_value=0)
 
-    assert app.run(input=ArgvInput(argv)) == 0
-    assert handle_mock.called_once()
+        poetry = poetry_from_fixture("pyproject_multiple_groups.toml")
+        app = application_factory(poetry)
 
-    sorted_pyproject_content = poetry.file.path.read_text()
-    expected_pyproject_content = (
-        fixture_dir / "pyproject_multiple_groups__sorted.toml"
-    ).read_text()
-    assert sorted_pyproject_content == expected_pyproject_content
+        assert app.run(input=ArgvInput(argv)) == 0
+        assert handle_mock.called_once()
+
+        sorted_pyproject_content = poetry.file.path.read_text()
+        expected_pyproject_content = (
+            fixture_dir / "pyproject_multiple_groups__sorted.toml"
+        ).read_text()
+        assert sorted_pyproject_content == expected_pyproject_content
+
+
+@pytest.mark.parametrize(
+    ("argv", "command_path"),
+    (
+        (
+            ["", "init"],
+            "poetry.console.commands.init.InitCommand",
+        ),
+        (
+            ["", "add", "somepckage"],
+            "poetry.console.commands.add.AddCommand",
+        ),
+    ),
+)
+@pytest.mark.parametrize(
+    "poetry_sort_enabled_var", ("N", "No", "f", "FALSE", "oFf", "0")
+)
+def test_sort_dependencies_after_calling_another_command_with_disabled_sorting(
+    application_factory,
+    fixture_dir,
+    poetry_from_fixture,
+    mocker,
+    argv: list[str],
+    command_path: str,
+    poetry_sort_enabled_var,
+):
+    """Makes sure that dependencies won't be sorted when `POETRY_SORT_ENABLED=False`"""
+    with mock.patch.dict(os.environ, {"POETRY_SORT_ENABLED": poetry_sort_enabled_var}):
+        handle_mock = mocker.patch(f"{command_path}.handle", return_value=0)
+
+        poetry = poetry_from_fixture("pyproject_multiple_groups.toml")
+        app = application_factory(poetry)
+        pyproject_content_before = poetry.file.path.read_text()
+
+        assert app.run(input=ArgvInput(argv)) == 0
+        assert handle_mock.called_once()
+
+        pyproject_content_after = poetry.file.path.read_text()
+        assert pyproject_content_before == pyproject_content_after
 
 
 @pytest.mark.parametrize(
@@ -104,7 +158,7 @@ def test_sort_dependencies_after_another_command(
         (
             ["", "remove", "somepckage"],
             "poetry.console.commands.remove.RemoveCommand",
-            1,
+            0,
         ),
         (
             ["", "env", "list"],
@@ -128,12 +182,10 @@ def test_not_sort_dependencies(
 
     poetry = poetry_from_fixture("pyproject_multiple_groups.toml")
     app = application_factory(poetry)
+    pyproject_content_before = poetry.file.path.read_text()
 
     assert app.run(input=ArgvInput(argv)) == exit_code
     assert handle_mock.called_once()
 
-    sorted_pyproject_content = poetry.file.path.read_text()
-    expected_pyproject_content = (
-        fixture_dir / "pyproject_multiple_groups.toml"
-    ).read_text()
-    assert sorted_pyproject_content == expected_pyproject_content
+    pyproject_content_after = poetry.file.path.read_text()
+    assert pyproject_content_before == pyproject_content_after

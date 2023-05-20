@@ -5,11 +5,11 @@
 [![check](https://github.com/andrei-shabanski/poetry-plugin-sort/actions/workflows/test.yml/badge.svg)](https://github.com/andrei-shabanski/poetry-plugin-sort/actions/workflows/test.yml)
 
 This package is a plugin that sort dependencies alphabetically in pyproject.toml
-after running `poetry init`, `poetry add`, or `poetry remove`.
+after running `poetry init` and `poetry add`.
 Since [Introduce dependency sorting #3996](https://github.com/python-poetry/poetry/pull/3996) pull request still open
 this plugin is a workaround for [!312](https://github.com/python-poetry/poetry/issues/312) issue.
 
-# Installation
+## Installation
 
 Just use `poetry self add` command to add this plugin.
 
@@ -29,7 +29,7 @@ And if you installed Poetry using pip, you can install the plugin the same way.
 pip install poetry poetry-plugin-sort
 ```
 
-# Usage
+## Usage
 
 The plugin sorts dependencies each time when you change dependencies via the `poetry init` and `poetry add` commands.
 
@@ -39,12 +39,12 @@ To sort dependencies without making changes to the dependencies list, the plugin
 poetry sort
 ```
 
-The `--check` option can be used to verify if dependencies are sorted (e.g. for CI purposes).
+### Available options
 
-```bash
-if poetry sort --check; then
-    echo "It's all fine"
-else
-    echo "Please sort your dependencies"
-fi
-```
+* `--check`: Checks if dependencies are sorted and exits with a non-zero status code when it doesn't.
+
+### Configurations
+
+Use the following environment variables to change the plugin behavior:
+
+* `POETRY_SORT_ENABLED` (default: `True`): Enable or disable in `poetry init` and `poetry add` commands.

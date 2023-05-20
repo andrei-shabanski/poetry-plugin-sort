@@ -34,7 +34,9 @@ def test_sort(
     [
         ("pyproject_without_dependencies.toml", True),
         ("pyproject_legacy_dev_group.toml", False),
+        ("pyproject_legacy_dev_group__sorted.toml", True),
         ("pyproject_multiple_groups.toml", False),
+        ("pyproject_multiple_groups__sorted.toml", True),
     ],
 )
 def test_sort_with_check_flag(
@@ -43,7 +45,7 @@ def test_sort_with_check_flag(
     source_pyproject_filename,
     expected_status,
 ):
-    """Tests that dependencies won't be sorted if `check` flag is enabled"""
+    """Makes sure that dependencies won't be sorted if `check` flag is enabled"""
     poetry = poetry_from_fixture(source_pyproject_filename)
     pyproject_content_before = poetry.file.path.read_text()
 

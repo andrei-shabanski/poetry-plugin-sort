@@ -5,6 +5,7 @@
 ### Added
 
 - Added a `--check` option to verify if dependencies are already sorted.
+- `POETRY_SORT_ENABLED` environment variable to enable or disable sorting in `poetry init`, `poetry add` commands.
 
 ## [0.1.1] - 2022-10-25
 
@@ -22,4 +23,4 @@
 
 ### Added
 
-- Implemented dependencies sorting after calling `poetry add`, `poetry remove`, and `poetry init` commands.
+- Implemented dependencies sorting after calling `poetry init`, `poetry add`, and `poetry remove` commands.

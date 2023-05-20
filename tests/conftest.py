@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import os
+
 from pathlib import Path
 
 import pytest
@@ -20,6 +22,13 @@ def poetry_factory(tmp_path):
         return poetry
 
     return factory
+
+
+@pytest.fixture(scope="session", autouse=True)
+def unset_env_vars():
+    plugin_keys = (key for key in os.environ.keys() if key.startswith("POETRY_SORT_"))
+    for key in plugin_keys:
+        os.environ.pop(key)
 
 
 @pytest.fixture
