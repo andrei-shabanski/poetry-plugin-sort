@@ -1,3 +1,7 @@
+import os
+
+from unittest import mock
+
 import pytest
 
 from cleo.io.null_io import NullIO
@@ -26,6 +30,27 @@ def test_sort(
 
     sorted_pyproject_content = poetry.file.path.read_text()
     expected_pyproject_content = (fixture_dir / excepted_pyproject_filename).read_text()
+    assert sorted_pyproject_content == expected_pyproject_content
+
+
+def test_sort_and_move_optionals_to_bottom(
+    fixture_dir,
+    poetry_from_fixture,
+):
+    """
+    Makes sure that optional packages will be moved to the bottom
+    if `POETRY_SORT_OPTIONALS_SEPARATELY=True`
+    """
+    poetry = poetry_from_fixture("pyproject_multiple_groups.toml")
+
+    with mock.patch.dict(os.environ, {"POETRY_SORT_OPTIONALS_SEPARATELY": "yes"}):
+        sorter = Sorter(poetry=poetry, io=NullIO())
+        assert sorter.sort() is True
+
+    sorted_pyproject_content = poetry.file.path.read_text()
+    expected_pyproject_content = (
+        fixture_dir / "pyproject_multiple_groups__sorted_optional.toml"
+    ).read_text()
     assert sorted_pyproject_content == expected_pyproject_content
 
 

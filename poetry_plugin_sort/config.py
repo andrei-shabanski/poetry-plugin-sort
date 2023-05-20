@@ -18,3 +18,7 @@ def _strtobool(value: Union[str, bool]) -> bool:
 
 def is_sorting_enabled() -> bool:
     return _strtobool(os.getenv("POETRY_SORT_ENABLED", default=True))
+
+
+def is_sort_optionals_separately() -> bool:
+    return _strtobool(os.getenv("POETRY_SORT_OPTIONALS_SEPARATELY", default=False))

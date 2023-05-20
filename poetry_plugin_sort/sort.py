@@ -6,11 +6,14 @@ from poetry.core.packages.dependency_group import MAIN_GROUP
 from poetry.poetry import Poetry
 from tomlkit.items import Item, Key, Table
 
+from poetry_plugin_sort import config
+
 
 class Sorter:
     def __init__(self, poetry: Poetry, io: IO, check: bool = False):
         self._poetry = poetry
         self._io = io
+        self._sort_optionals_separately = config.is_sort_optionals_separately()
         self._check = check
         self._success = True
 
@@ -49,7 +52,9 @@ class Sorter:
 
         assert isinstance(dependency_section, Table)
         items = dependency_section.value.body
-        sorted_body = sorted(items, key=partial(self._sort_key, items=items))
+        sorted_body = sorted(
+            items, key=partial(self._extract_comparison_key, items=items)
+        )
 
         if self._check:
             if sorted_body != dependency_section.value.body:
@@ -60,28 +65,69 @@ class Sorter:
         else:
             dependency_section.value._body = sorted_body
 
-    def _sort_key(
+    def _extract_comparison_key(
         self, item: Tuple[Optional[Key], Item], items: List[Tuple[Optional[Key], Item]]
-    ) -> str:
+    ) -> Tuple[int, str]:
+        """
+        Returns a tuple of 2 elements `(weight, item-string)` which will
+        be used as a comparison key.
+
+        The tuple consists of:
+        * weight - an integer to group similar items. For instance, it
+            helps to move optional dependencies to the bottom.
+        * item-string - a string represented the item. It can be:
+            - a package name if the item contains a python package;
+            - `chr(0)` if the item is a comment related to a python version;
+            - `chr(1)` if the item is a python version;
+            - `chr(127)` if the item is a python version.
+        """
         package_name, package_value = item
 
         if package_name:
+            weight = self._get_item_weight(item)
             package_name_str = package_name.key.lower()
             if package_name_str == "python":
-                return chr(1)
-            return package_name_str
+                return weight, chr(1)
+            return weight, package_name_str
 
+        # attach the comment line to a downstream python package
         idx = items.index(item)
         for next_item in items[idx:]:
             if not next_item[0]:
                 continue
 
+            weight = self._get_item_weight(next_item)
             next_item_str = next_item[0].key.lower()
             if next_item_str == "python":
-                return chr(0)
-            return next_item_str
+                return weight, chr(0)
+            return weight, next_item_str
 
-        return chr(127)
+        weight = self._get_item_weight(item)
+        return weight, chr(127)  # whitespace
+
+    def _get_item_weight(self, item: Tuple[Optional[Key], Item]) -> int:
+        """
+        Returns a weight for grouping similar items.
+
+        It can be:
+        * 1 if the item is a required package or python version
+        * 2 if the item is an optional package
+        * 9 if the item is a whitespace
+        """
+        package_name, package_value = item
+
+        if not package_name:
+            return 9
+
+        if not (
+            self._sort_optionals_separately
+            and package_value
+            and isinstance(package_value, dict)
+            and package_value.get("optional")
+        ):
+            return 1
+
+        return 2
 
 
 def _get_by_path(d: dict, path: List[str]) -> Any:

@@ -48,3 +48,4 @@ poetry sort
 Use the following environment variables to change the plugin behavior:
 
 * `POETRY_SORT_ENABLED` (default: `True`): Enable or disable in `poetry init` and `poetry add` commands.
+* `POETRY_SORT_OPTIONALS_SEPARATELY` (default: `False`): Move optional packages to the bottom.
