@@ -1,7 +1,9 @@
 import os
 
+from typing import Union
 
-def _strtobool(value: str | bool) -> bool:
+
+def _strtobool(value: Union[str, bool]) -> bool:
     if isinstance(value, bool):
         return value
 
