@@ -1,0 +1,8 @@
+- id: poetry-sort
+  name: poetry-sort
+  description: sort dependencies in pyproject.toml
+  entry: poetry sort
+  language: python
+  language_version: python3
+  pass_filenames: false
+  files: ^pyproject.toml$
