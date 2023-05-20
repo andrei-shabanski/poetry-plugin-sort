@@ -4,6 +4,7 @@ from typing import Type
 
 from cleo.events import console_events
 from cleo.events.console_terminate_event import ConsoleTerminateEvent
+from cleo.events.event import Event
 from cleo.events.event_dispatcher import EventDispatcher
 from cleo.helpers import option
 from cleo.io.io import IO
@@ -39,15 +40,17 @@ class SortDependenciesPlugin(ApplicationPlugin):
         return [SortCommand]
 
     def activate(self, application: Application) -> None:
-        application.event_dispatcher.add_listener(
+        application.event_dispatcher.add_listener(  # type: ignore[union-attr]
             console_events.TERMINATE, self.sort_dependencies
         )
 
         super().activate(application)
 
     def sort_dependencies(
-        self, event: ConsoleTerminateEvent, event_name: str, dispatcher: EventDispatcher
+        self, event: Event, event_name: str, dispatcher: EventDispatcher
     ) -> None:
+        assert isinstance(event, ConsoleTerminateEvent)
+
         io = event.io
         command = event.command
 

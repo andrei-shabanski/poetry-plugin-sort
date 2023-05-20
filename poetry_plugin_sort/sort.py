@@ -3,8 +3,8 @@ from typing import Any, List, Optional, Tuple
 
 from cleo.io.io import IO
 from poetry.core.packages.dependency_group import MAIN_GROUP
-from poetry.core.poetry import Poetry
-from tomlkit.items import Item, Key
+from poetry.poetry import Poetry
+from tomlkit.items import Item, Key, Table
 
 
 class Sorter:
@@ -47,6 +47,7 @@ class Sorter:
         if self._io.is_debug():
             self._io.write_line(f'Sorting items in [{".".join(path)}].')
 
+        assert isinstance(dependency_section, Table)
         items = dependency_section.value.body
         sorted_body = sorted(items, key=partial(self._sort_key, items=items))
 

@@ -77,7 +77,7 @@ def test_sort_dependencies_after_another_command(
     poetry = poetry_from_fixture("pyproject_multiple_groups.toml")
     app = application_factory(poetry)
 
-    app.run(input=ArgvInput(argv))
+    assert app.run(input=ArgvInput(argv)) == 0
     assert handle_mock.called_once()
 
     sorted_pyproject_content = poetry.file.path.read_text()
@@ -129,7 +129,7 @@ def test_not_sort_dependencies(
     poetry = poetry_from_fixture("pyproject_multiple_groups.toml")
     app = application_factory(poetry)
 
-    app.run(input=ArgvInput(argv))
+    assert app.run(input=ArgvInput(argv)) == exit_code
     assert handle_mock.called_once()
 
     sorted_pyproject_content = poetry.file.path.read_text()
