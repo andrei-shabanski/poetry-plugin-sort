@@ -67,7 +67,7 @@ def test_is_sort_optionals_separately(poetry_factory):
     _test_boolean_variable(
         poetry_factory,
         is_sort_optionals_separately,
-        env_name="POETRY_SORT_OPTIONALS_SEPARATELY",
-        config_name="optionals-separately",
+        env_name="POETRY_SORT_MOVE_OPTIONALS_TO_BOTTOM",
+        config_name="move-optionals-to-bottom",
         default=False,
     )

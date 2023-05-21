@@ -39,11 +39,11 @@ def test_sort_and_move_optionals_to_bottom(
 ):
     """
     Makes sure that optional packages will be moved to the bottom
-    if `POETRY_SORT_OPTIONALS_SEPARATELY=True`
+    if `POETRY_SORT_MOVE_OPTIONALS_TO_BOTTOM=True`
     """
     poetry = poetry_from_fixture("pyproject_multiple_groups.toml")
 
-    with mock.patch.dict(os.environ, {"POETRY_SORT_OPTIONALS_SEPARATELY": "yes"}):
+    with mock.patch.dict(os.environ, {"POETRY_SORT_MOVE_OPTIONALS_TO_BOTTOM": "yes"}):
         sorter = Sorter(poetry=poetry, io=NullIO())
         assert sorter.sort() is True
 

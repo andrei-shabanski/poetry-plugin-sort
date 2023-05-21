@@ -6,7 +6,7 @@
 
 - Added a `--check` option to verify if dependencies are already sorted.
 - New environment variable `POETRY_SORT_ENABLED` to enable or disable sorting in `poetry init`, `poetry add` commands.
-- New environment variable `POETRY_SORT_OPTIONALS_SEPARATELY` to move optional packages to the bottom.
+- New environment variable `POETRY_SORT_MOVE_OPTIONALS_TO_BOTTOM` to move optional packages to the bottom.
 
 ### Removed
 

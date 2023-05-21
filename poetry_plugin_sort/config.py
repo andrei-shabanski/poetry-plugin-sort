@@ -34,4 +34,6 @@ def is_sorting_enabled(poetry: Poetry) -> bool:
 
 
 def is_sort_optionals_separately(poetry: Poetry) -> bool:
-    return _strtobool(_get_variable(poetry, "POETRY_SORT_OPTIONALS_SEPARATELY", False))
+    return _strtobool(
+        _get_variable(poetry, "POETRY_SORT_MOVE_OPTIONALS_TO_BOTTOM", False)
+    )
