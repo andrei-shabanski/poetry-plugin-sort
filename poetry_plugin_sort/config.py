@@ -1,6 +1,10 @@
 import os
 
-from typing import Union
+from typing import Any, Union
+
+from poetry.poetry import Poetry
+
+from poetry_plugin_sort.utils import get_by_path
 
 
 def _strtobool(value: Union[str, bool]) -> bool:
@@ -16,9 +20,21 @@ def _strtobool(value: Union[str, bool]) -> bool:
         raise ValueError(f"invalid truth value {value!r}")
 
 
-def is_sorting_enabled() -> bool:
-    return _strtobool(os.getenv("POETRY_SORT_ENABLED", default=True))
+def _get_variable(poetry: Poetry, env_name: str, default: Any) -> Any:
+    if env_name in os.environ:
+        return os.environ[env_name]
+
+    plugin_config = get_by_path(poetry.pyproject.data, ["tool", "poetry-sort"])
+    if not plugin_config:
+        return default
+
+    name = env_name[: -len("POETRY_SORT_")].replace("_", "-")
+    return plugin_config.get(name, default)
 
 
-def is_sort_optionals_separately() -> bool:
-    return _strtobool(os.getenv("POETRY_SORT_OPTIONALS_SEPARATELY", default=False))
+def is_sorting_enabled(poetry: Poetry) -> bool:
+    return _strtobool(_get_variable(poetry, "POETRY_SORT_ENABLED", True))
+
+
+def is_sort_optionals_separately(poetry: Poetry) -> bool:
+    return _strtobool(_get_variable(poetry, "POETRY_SORT_OPTIONALS_SEPARATELY", False))

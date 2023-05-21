@@ -40,7 +40,7 @@ class SortDependenciesPlugin(ApplicationPlugin):
         return [SortCommand]
 
     def activate(self, application: Application) -> None:
-        if config.is_sorting_enabled():
+        if config.is_sorting_enabled(application.poetry):
             application.event_dispatcher.add_listener(  # type: ignore[union-attr]
                 console_events.TERMINATE, self.sort_dependencies
             )

@@ -45,7 +45,7 @@ poetry sort
 
 ### Configurations
 
-Use the following environment variables to change the plugin behavior:
+The following configuration can be set in `[tool.poetry-sort]` section of the pyproject.toml file or as system-wide environment variables:
 
-* `POETRY_SORT_ENABLED` (default: `True`): Enable or disable in `poetry init` and `poetry add` commands.
-* `POETRY_SORT_OPTIONALS_SEPARATELY` (default: `False`): Move optional packages to the bottom.
+* `enable` \ `POETRY_SORT_ENABLED`: Enable or disable sorting after invoking `poetry init` and `poetry add` commands. Default: `True`.
+* `optionals-separately` \ `POETRY_SORT_OPTIONALS_SEPARATELY`: Move optional packages to the bottom. Default: `False`.

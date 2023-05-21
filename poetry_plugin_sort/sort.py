@@ -1,5 +1,5 @@
 from functools import partial
-from typing import Any, List, Optional, Tuple
+from typing import List, Optional, Tuple
 
 from cleo.io.io import IO
 from poetry.core.packages.dependency_group import MAIN_GROUP
@@ -7,13 +7,14 @@ from poetry.poetry import Poetry
 from tomlkit.items import Item, Key, Table
 
 from poetry_plugin_sort import config
+from poetry_plugin_sort.utils import get_by_path
 
 
 class Sorter:
     def __init__(self, poetry: Poetry, io: IO, check: bool = False):
         self._poetry = poetry
         self._io = io
-        self._sort_optionals_separately = config.is_sort_optionals_separately()
+        self._sort_optionals_separately = config.is_sort_optionals_separately(poetry)
         self._check = check
         self._success = True
 
@@ -43,7 +44,7 @@ class Sorter:
         return self._success
 
     def _sort_dependencies_by_path(self, path: List[str]) -> None:
-        dependency_section = _get_by_path(self._poetry.pyproject.data, path)
+        dependency_section = get_by_path(self._poetry.pyproject.data, path)
         if not dependency_section:
             return
 
@@ -128,14 +129,3 @@ class Sorter:
             return 1
 
         return 2
-
-
-def _get_by_path(d: dict, path: List[str]) -> Any:
-    """
-    Gets a value from the dictionary by the path.
-    """
-    for key in path:
-        d = d.get(key, None)
-        if d is None:
-            return None
-    return d
