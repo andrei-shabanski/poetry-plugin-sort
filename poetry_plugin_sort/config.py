@@ -28,7 +28,7 @@ def _get_variable(poetry: Poetry, env_name: str, default: Any) -> Any:
     if not plugin_config:
         return default
 
-    name = env_name[: -len("POETRY_SORT_")].replace("_", "-")
+    name = env_name[len("POETRY_SORT_") :].replace("_", "-").lower()
     return plugin_config.get(name, default)
 
 
