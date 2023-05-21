@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "poetry-plugin-sort"
-version = "0.2.0b2"
+version = "0.2.0"
 description = "Poetry plugin to sort the dependencies alphabetically"
 authors = ["Andrei Shabanski <shabanski.andrei@gmail.com>"]
 license = "MIT"
