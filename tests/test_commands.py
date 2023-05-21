@@ -149,7 +149,11 @@ def test_sort_dependencies_after_calling_another_command_with_disabled_sorting(
             "poetry.console.commands.add.AddCommand",
             0,
         ),
-        (["", "add", "somepckage"], "poetry.console.commands.add.AddCommand", 1),
+        (
+            ["", "add", "somepckage"],
+            "poetry.console.commands.add.AddCommand",
+            1,
+        ),
         (
             ["", "remove", "--dry-run", "somepckage"],
             "poetry.console.commands.remove.RemoveCommand",
@@ -163,6 +167,11 @@ def test_sort_dependencies_after_calling_another_command_with_disabled_sorting(
         (
             ["", "env", "list"],
             "poetry.console.commands.env.list.EnvListCommand",
+            0,
+        ),
+        (
+            ["", "about"],
+            "poetry.console.commands.about.AboutCommand",
             0,
         ),
     ),
@@ -189,3 +198,31 @@ def test_not_sort_dependencies(
 
     pyproject_content_after = poetry.file.path.read_text()
     assert pyproject_content_before == pyproject_content_after
+
+
+@pytest.mark.parametrize(
+    ("argv", "expected_exit_code"),
+    (
+        (["", "add", "somepckage"], 1),
+        (["", "sort"], 1),
+        (
+            ["", "about"],
+            0,
+        ),
+        (
+            ["", "self", "show", "plugins"],
+            0,
+        ),
+    ),
+)
+def test_call_commands_without_pyprojecttoml(
+    application_factory,
+    monkeypatch,
+    tmp_path,
+    argv: list[str],
+    expected_exit_code: int,
+):
+    """Makes sure that the plugin does not have side effect on the poetry"""
+    monkeypatch.chdir(tmp_path)
+    app = application_factory()
+    assert app.run(input=ArgvInput(argv)) == expected_exit_code
