@@ -21,15 +21,12 @@ def _strtobool(value: Union[str, bool]) -> bool:
 
 
 def _get_variable(poetry: Poetry, env_name: str, default: Any) -> Any:
-    if env_name in os.environ:
-        return os.environ[env_name]
-
     plugin_config = get_by_path(poetry.pyproject.data, ["tool", "poetry-sort"])
-    if not plugin_config:
-        return default
-
     name = env_name[len("POETRY_SORT_") :].replace("_", "-").lower()
-    return plugin_config.get(name, default)
+    if plugin_config and name in plugin_config:
+        return plugin_config[name]
+
+    return os.environ.get(env_name, default)
 
 
 def is_sorting_enabled(poetry: Poetry) -> bool:

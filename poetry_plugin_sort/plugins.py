@@ -40,11 +40,9 @@ class SortDependenciesPlugin(ApplicationPlugin):
         return [SortCommand]
 
     def activate(self, application: Application) -> None:
-        if config.is_sorting_enabled(application.poetry):
-            application.event_dispatcher.add_listener(  # type: ignore[union-attr]
-                console_events.TERMINATE, self.sort_dependencies
-            )
-
+        application.event_dispatcher.add_listener(  # type: ignore[union-attr]
+            console_events.TERMINATE, self.sort_dependencies
+        )
         super().activate(application)
 
     def sort_dependencies(
@@ -74,6 +72,12 @@ class SortDependenciesPlugin(ApplicationPlugin):
         if command.option("dry-run", False):
             self._write_debug_lines(
                 io, "Skip sorting dependencies due to --dry-run option."
+            )
+            return
+
+        if not config.is_sorting_enabled(command.poetry):
+            self._write_debug_lines(
+                io, "Skip sorting dependencies due to disabled sorting."
             )
             return
 
