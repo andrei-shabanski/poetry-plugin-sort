@@ -101,47 +101,48 @@ def test_sort_dependencies_after_calling_another_command(
         assert sorted_pyproject_content == expected_pyproject_content
 
 
-@pytest.mark.parametrize(
-    ("argv", "command_path", "input_fixture", "expected_output", "expected_rc"),
-    (
-        (
-            ["", "check"],
-            "poetry.console.commands.check.CheckCommand",
-            "pyproject_multiple_groups.toml",
-            "pyproject_multiple_groups.toml",
-            1,
-        ),
-        (
-            ["", "check"],
-            "poetry.console.commands.check.CheckCommand",
-            "pyproject_multiple_groups__sorted.toml",
-            "pyproject_multiple_groups__sorted.toml",
-            0,
-        ),
-    ),
-)
 def test_sort_on_check_command(
     application_factory,
     fixture_dir,
     poetry_from_fixture,
-    argv: list[str],
-    command_path: str,
-    input_fixture: str,
-    expected_output: str,
-    expected_rc: int,
 ):
     """
     Makes sure that dependencies sort check runs on `poetry check`
     """
-    poetry = poetry_from_fixture(input_fixture)
+    poetry = poetry_from_fixture("pyproject_multiple_groups__sorted.toml")
     app = application_factory(poetry)
 
-    rc = app.run(input=ArgvInput(argv))
+    app.run(input=ArgvInput(["", "check"]))
+
     sorted_pyproject_content = poetry.file.path.read_text()
-    expected_pyproject_content = (fixture_dir / expected_output).read_text()
+    expected_pyproject_content = (
+        fixture_dir / "pyproject_multiple_groups__sorted.toml"
+    ).read_text()
 
     assert sorted_pyproject_content == expected_pyproject_content
-    assert rc == expected_rc
+
+
+def test_sort_on_check_command_failure(
+    application_factory,
+    fixture_dir,
+    poetry_from_fixture,
+):
+    """
+    Makes sure that dependencies sort check runs on `poetry check`
+    """
+    poetry = poetry_from_fixture("pyproject_multiple_groups.toml")
+    app = application_factory(poetry)
+
+    with pytest.raises(SystemExit) as excinfo:
+        app.run(input=ArgvInput(["", "check"]))
+
+    sorted_pyproject_content = poetry.file.path.read_text()
+    expected_pyproject_content = (
+        fixture_dir / "pyproject_multiple_groups.toml"
+    ).read_text()
+
+    assert sorted_pyproject_content == expected_pyproject_content
+    assert excinfo.value.code == 1
 
 
 @pytest.mark.parametrize(

@@ -83,7 +83,10 @@ class SortDependenciesPlugin(ApplicationPlugin):
         check = isinstance(command, CheckCommand)
 
         sorter = Sorter(command.poetry, io, check)
-        sorter.sort()
+        success = sorter.sort()
+
+        if check and not success:
+            exit(1)
 
     def _write_debug_lines(self, io: IO, message: str) -> None:
         if io.is_debug():
