@@ -10,6 +10,7 @@ from cleo.helpers import option
 from cleo.io.io import IO
 from poetry.console.application import Application
 from poetry.console.commands.add import AddCommand
+from poetry.console.commands.check import CheckCommand
 from poetry.console.commands.command import Command
 from poetry.console.commands.init import InitCommand
 from poetry.plugins.application_plugin import ApplicationPlugin
@@ -59,7 +60,7 @@ class SortDependenciesPlugin(ApplicationPlugin):
             )
             return
 
-        if not isinstance(command, (InitCommand, AddCommand)):
+        if not isinstance(command, (InitCommand, AddCommand, CheckCommand)):
             self._write_debug_lines(
                 io,
                 f"Skip sorting dependencies due to {command} does not change the"
@@ -79,7 +80,9 @@ class SortDependenciesPlugin(ApplicationPlugin):
             )
             return
 
-        sorter = Sorter(command.poetry, io)
+        check = isinstance(command, CheckCommand)
+
+        sorter = Sorter(command.poetry, io, check)
         sorter.sort()
 
     def _write_debug_lines(self, io: IO, message: str) -> None:
