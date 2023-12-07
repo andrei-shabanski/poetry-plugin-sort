@@ -92,7 +92,7 @@ def test_sort_dependencies_after_calling_another_command(
         app = application_factory(poetry)
 
         assert app.run(input=ArgvInput(argv)) == 0
-        assert handle_mock.called_once()
+        handle_mock.assert_called_once()
 
         sorted_pyproject_content = poetry.file.path.read_text()
         expected_pyproject_content = (
@@ -135,7 +135,7 @@ def test_sort_dependencies_after_calling_another_command_with_disabled_sorting(
         pyproject_content_before = poetry.file.path.read_text()
 
         assert app.run(input=ArgvInput(argv)) == 0
-        assert handle_mock.called_once()
+        handle_mock.assert_called_once()
 
         pyproject_content_after = poetry.file.path.read_text()
         assert pyproject_content_before == pyproject_content_after
@@ -194,7 +194,7 @@ def test_not_sort_dependencies(
     pyproject_content_before = poetry.file.path.read_text()
 
     assert app.run(input=ArgvInput(argv)) == exit_code
-    assert handle_mock.called_once()
+    handle_mock.assert_called_once()
 
     pyproject_content_after = poetry.file.path.read_text()
     assert pyproject_content_before == pyproject_content_after
