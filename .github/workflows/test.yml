@@ -24,6 +24,9 @@ jobs:
           - os: Ubuntu
             python-version: "3.7"
             poetry-version: "1.6.1"
+          - os: Ubuntu
+            python-version: "3.7"
+            poetry-version: "1.7.1"
       fail-fast: false
     defaults:
       run:
