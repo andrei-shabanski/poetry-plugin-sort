@@ -18,6 +18,8 @@ class Sorter:
         self._check = check
         self._success = True
 
+        self._poetry.pyproject.reload()  # reset possibly outdated `pyproject.data`
+
     def sort(self) -> bool:
         """Sorts dependencies from all groups and writes changes to pyproject.toml"""
         group_names = self._poetry.package.dependency_group_names(include_optional=True)

@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.2.1] - 2024-01-06
+
+### Fixed
+
+- Read the updated pyproject.toml file before sorting dependencies (#15)
+
 ## [0.2.0] - 2023-05-21
 
 ### Added

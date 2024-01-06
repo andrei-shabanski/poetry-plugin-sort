@@ -226,3 +226,56 @@ def test_call_commands_without_pyprojecttoml(
     monkeypatch.chdir(tmp_path)
     app = application_factory()
     assert app.run(input=ArgvInput(argv)) == expected_exit_code
+
+
+def test_reload_toml_file(
+    application_factory,
+    fixture_dir,
+    poetry_factory,
+    mocker,
+):
+    """
+    Makes sure that the plugin works with fresh data of toml file.
+    """
+    installed_mock = mocker.patch(
+        "poetry.installation.installer.Installer.run", return_value=0
+    )
+
+    poetry = poetry_factory("""[tool.poetry]
+name = "test"
+version = "0.1.0"
+description = ""
+authors = ["<author@example.com>"]
+
+[tool.poetry.dependencies]
+wow = "^123"
+python = "^3.7"
+abc = "1"
+
+[tool.poetry.dev-dependencies]
+flake8-bugbear = "^22.1.11"
+flake8 = "^5.0.4"
+    """)
+    app = application_factory(poetry)
+    poetry.pyproject.data  # read toml file and populate `data` property
+
+    assert app.run(input=ArgvInput(["", "add", "somepckage"])) == 0
+    installed_mock.assert_called_once()
+
+    sorted_pyproject_content = poetry.file.path.read_text()
+    assert sorted_pyproject_content == """[tool.poetry]
+name = "test"
+version = "0.1.0"
+description = ""
+authors = ["<author@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+abc = "1"
+somepckage = "^1"
+wow = "^123"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^5.0.4"
+flake8-bugbear = "^22.1.11"
+    """
