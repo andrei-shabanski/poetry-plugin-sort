@@ -241,7 +241,8 @@ def test_reload_toml_file(
         "poetry.installation.installer.Installer.run", return_value=0
     )
 
-    poetry = poetry_factory("""[tool.poetry]
+    poetry = poetry_factory(
+        """[tool.poetry]
 name = "test"
 version = "0.1.0"
 description = ""
@@ -255,7 +256,8 @@ abc = "1"
 [tool.poetry.dev-dependencies]
 flake8-bugbear = "^22.1.11"
 flake8 = "^5.0.4"
-    """)
+    """
+    )
     app = application_factory(poetry)
     poetry.pyproject.data  # read toml file and populate `data` property
 
@@ -263,7 +265,9 @@ flake8 = "^5.0.4"
     installed_mock.assert_called_once()
 
     sorted_pyproject_content = poetry.file.path.read_text()
-    assert sorted_pyproject_content == """[tool.poetry]
+    assert (
+        sorted_pyproject_content
+        == """[tool.poetry]
 name = "test"
 version = "0.1.0"
 description = ""
@@ -279,3 +283,4 @@ wow = "^123"
 flake8 = "^5.0.4"
 flake8-bugbear = "^22.1.11"
     """
+    )
