@@ -12,7 +12,7 @@ keywords = ["poetry", "plugin", "dependencies sorting"]
 packages = [{include = "poetry_plugin_sort"}]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.8"
 poetry = "^1.2"
 
 [tool.poetry.group.dev.dependencies]
@@ -30,7 +30,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.black]
-target-version = ['py37']
+target-version = ['py38']
 preview = true
 
 [tool.isort]
