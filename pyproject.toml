@@ -13,7 +13,7 @@ packages = [{include = "poetry_plugin_sort"}]
 
 [tool.poetry.dependencies]
 python = "^3.7"
-poetry = "^1.2.0"
+poetry = "^1.2"
 
 [tool.poetry.group.dev.dependencies]
 httpretty = "^1.1.4"
