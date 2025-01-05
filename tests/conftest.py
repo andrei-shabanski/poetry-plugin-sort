@@ -16,8 +16,10 @@ from poetry.core.packages.utils.link import Link
 from poetry.factory import Factory
 from poetry.poetry import Poetry
 from poetry.repositories import Repository, RepositoryPool
-from poetry.repositories.exceptions import PackageNotFound
-
+try:
+    from poetry.repositories.exceptions import PackageNotFound
+except ImportError:
+    from poetry.repositories.exceptions import PackageNotFoundError as PackageNotFound
 
 @pytest.fixture(scope="session", autouse=True)
 def unset_env_vars():
