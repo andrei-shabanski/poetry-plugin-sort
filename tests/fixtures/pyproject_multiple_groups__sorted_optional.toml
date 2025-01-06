@@ -1,3 +1,15 @@
+[project]
+name = "test-package"
+dependencies = [
+    "abc>=15",
+    "Django (==5.0.0)",  # comment about Django
+    # start
+    # comment #1 about requests
+    # comment #2 about requests
+    # end
+    "requests (>=2.23.0,<3.0.0)"
+]
+
 [tool.poetry]
 name = "test"
 version = "0.1.0"
