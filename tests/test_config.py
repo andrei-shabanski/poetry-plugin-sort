@@ -26,15 +26,23 @@ def _test_boolean_variable(
 ):
     default_poetry = poetry_factory(pyproject_toml_factory(""))
 
-    var_enabled_poetry = poetry_factory(pyproject_toml_factory(f"""
+    var_enabled_poetry = poetry_factory(
+        pyproject_toml_factory(
+            f"""
 [tool.poetry-sort]
 {config_name} = true
-    """))
+    """
+        )
+    )
 
-    var_disabled_poetry = poetry_factory(pyproject_toml_factory(f"""
+    var_disabled_poetry = poetry_factory(
+        pyproject_toml_factory(
+            f"""
 [tool.poetry-sort]
 {config_name} = false
-    """))
+    """
+        )
+    )
 
     assert func(default_poetry) is default
     assert func(var_enabled_poetry) is True  # always must be True

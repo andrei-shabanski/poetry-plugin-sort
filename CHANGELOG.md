@@ -1,10 +1,16 @@
 # Change Log
 
+## [0.3.0] - 2025-01-06
+
+### Added
+
+- Sort lines in `[project.dependencies]` section.
+
 ## [0.2.2] - 2025-01-05
 
 ### Added
 
-- Support Poetry version 2.0
+- Support Poetry version 2.0.
 
 ## [0.2.1] - 2024-01-06
 
