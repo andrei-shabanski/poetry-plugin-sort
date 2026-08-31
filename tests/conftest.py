@@ -17,7 +17,6 @@ from poetry.factory import Factory
 from poetry.poetry import Poetry
 from poetry.repositories import Repository, RepositoryPool
 
-
 try:
     from poetry.repositories.exceptions import PackageNotFound
 except ImportError:
